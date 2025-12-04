@@ -1,13 +1,30 @@
 import os
+from dotenv import load_dotenv
+import dj_database_url # Necesitarás instalar esta librería: pip install dj-database-url
 
+# ----------------------------------------------------
+# 1. CARGA DE VARIABLES DE ENTORNO
+# ----------------------------------------------------
+# Carga las variables del archivo .env
+load_dotenv() 
+
+# ----------------------------------------------------
+# CONFIGURACIÓN BÁSICA DE DJANGO
+# ----------------------------------------------------
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-# Mantén la clave secreta en variables de entorno en producción
-SECRET_KEY = '-_&+lsebec(whhw!%n@ww&1j=4-^j_if9x8$q778+99oz&!ms2'
+# Lee la clave secreta del archivo .env (¡MUY IMPORTANTE!)
+SECRET_KEY = os.environ.get('SECRET_KEY', 'default-key-para-desarrollo') 
 
-DEBUG = True  # en desarrollo
+# Lee el estado de DEBUG del archivo .env. En producción DEBE ser False
+DEBUG = os.environ.get('DEBUG', 'False') == 'True'
 
-ALLOWED_HOSTS = ["localhost", "127.0.0.1"]
+# Lee los hosts permitidos del archivo .env o usa localhost en desarrollo.
+# Usamos una lista de Python para los ALLOWED_HOSTS
+ALLOWED_HOSTS_STR = os.environ.get('ALLOWED_HOSTS', 'localhost,127.0.0.1')
+ALLOWED_HOSTS = ALLOWED_HOSTS_STR.split(',')
+
+
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -15,17 +32,17 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'django_filters',                 # necesarios para los filtros de DRF
+    'django_filters',
     'rest_framework',
-    'rest_framework.authtoken',       # conserva soporte de tokens de DRF
-    'corsheaders',                    # librería CORS actualizada
+    'rest_framework.authtoken',
+    'corsheaders', 
     'dev_sistema_escolar_api',
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
-    'corsheaders.middleware.CorsMiddleware',     # CORS debe ir antes de CommonMiddleware
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -33,27 +50,23 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-# Configuración de CORS: define orígenes permitidos y quita CORS_ORIGIN_ALLOW_ALL
-CORS_ALLOWED_ORIGINS = [
-    'http://localhost:4200',
-    'http://127.0.0.1:4200',
-]
+# ----------------------------------------------------
+# CONFIGURACIÓN DE CORS
+# ----------------------------------------------------
+# Lee los orígenes permitidos desde el .env
+CORS_ALLOWED_ORIGINS_STR = os.environ.get('CONS_ALLOWED_ORIGINS', 'http://localhost:4200')
+CORS_ALLOWED_ORIGINS = CORS_ALLOWED_ORIGINS_STR.split(',')
 
 CORS_ALLOW_CREDENTIALS = True
 
 ROOT_URLCONF = 'dev_sistema_escolar_api.urls'
 
 
-
-import os
-
 MEDIA_URL = "/media/"
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 
 STATIC_URL = "/static/"
-# STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
-# TEMPLATES[0]["DIRS"] = [os.path.join(BASE_DIR, "templates")]
-# STATICFILES_DIRS = [os.path.join(BASE_DIR, "static")]
+STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles") # Necesitas esto en producción
 
 TEMPLATES = [
     {
@@ -73,15 +86,27 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'dev_sistema_escolar_api.wsgi.application'
 
+# ----------------------------------------------------
+# 2. CONFIGURACIÓN DE BASE DE DATOS (LA CORRECCIÓN CLAVE)
+# ----------------------------------------------------
+# Aquí es donde Django obtenía la configuración de MySQL de forma incorrecta.
+# Ahora leerá las variables DB_XXX que definiste en el .env
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
+        'NAME': os.environ.get('DB_NAME'), 
+        'USER': os.environ.get('DB_USER'),
+        'PASSWORD': os.environ.get('DB_PASSWORD'),
+        'HOST': os.environ.get('DB_HOST'),  # <--- Lee la dirección correcta de PythonAnywhere
+        'PORT': os.environ.get('DB_PORT', 3306),
         'OPTIONS': {
-            'read_default_file': os.path.join(BASE_DIR, "my.cnf"),
-            'charset': 'utf8mb4',
+             'charset': 'utf8mb4',
+             # NO necesitas 'read_default_file': os.path.join(BASE_DIR, "my.cnf")
+             # Lo quitamos, ya que en PA usamos el host/puerto/usuario/pass directos
         }
     }
 }
+
 
 AUTH_PASSWORD_VALIDATORS = [
     {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator'},
@@ -95,8 +120,6 @@ TIME_ZONE = 'UTC'
 USE_I18N = True
 USE_L10N = True
 USE_TZ = True
-
-STATIC_URL = '/static/'
 
 REST_FRAMEWORK = {
     'COERCE_DECIMAL_TO_STRING': False,
