@@ -13,8 +13,8 @@ DEBUG = os.environ.get('DEBUG', 'False') == 'True'
 ALLOWED_HOSTS = [
     'localhost',
     '127.0.0.1',
-    'danielt.pythonanywhere.com',  # ✅ Tu dominio de PythonAnywhere
-    '.vercel.app',  # ✅ Para Vercel
+    'danielt.pythonanywhere.com',  
+    '.vercel.app', 
 ]
 
 INSTALLED_APPS = [
@@ -34,7 +34,7 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
-    'corsheaders.middleware.CorsMiddleware',  # ✅ CORS debe ir ANTES de CommonMiddleware
+    'corsheaders.middleware.CorsMiddleware',  
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -48,7 +48,7 @@ MIDDLEWARE = [
 CORS_ALLOWED_ORIGINS = [
     'http://localhost:4200',
     'http://127.0.0.1:4200',
-    'https://sistemaany-dvt1.vercel.app',  # ✅ Tu URL de Vercel
+    'https://sistemaany-dvt1.vercel.app',  
 ]
 
 CORS_ALLOW_CREDENTIALS = True
@@ -90,9 +90,9 @@ WSGI_APPLICATION = 'dev_sistema_escolar_api.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': os.environ.get('DB_NAME', 'DanielT$sistema_escolar'),
+        'NAME': os.environ.get('DB_NAME', 'DanielT$dev_sistema_escolar_db'),
         'USER': os.environ.get('DB_USER', 'DanielT'),
-        'PASSWORD': os.environ.get('DB_PASSWORD', 'tu_password_aqui'),
+        'PASSWORD': os.environ.get('DB_PASSWORD', 'teka110604'),
         'HOST': os.environ.get('DB_HOST', 'DanielT.mysql.pythonanywhere-services.com'),
         'PORT': os.environ.get('DB_PORT', '3306'),
         'OPTIONS': {
