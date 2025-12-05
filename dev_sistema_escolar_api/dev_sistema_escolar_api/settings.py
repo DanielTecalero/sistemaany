@@ -1,13 +1,14 @@
 import os
-
+import dj_database_url
+from pathlib import Path
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # Mantén la clave secreta en variables de entorno en producción
-SECRET_KEY = '-_&+lsebec(whhw!%n@ww&1j=4-^j_if9x8$q778+99oz&!ms2'
+SECRET_KEY = os.environ.get('SECRET_KEY', 'genera-una-clave-secreta-alcatoria-aqui-12345')
 
-DEBUG = True  # en desarrollo
+DEBUG = 'pythonanywhere'  # en desarrollo
 
-ALLOWED_HOSTS = ["localhost", "127.0.0.1"]
+ALLOWED_HOSTS = []
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -23,7 +24,9 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware', # CORS debe ir al inicio
     'django.middleware.security.SecurityMiddleware',
+    'white_noise.middleware.WhiteNoiseMiddleware', # para servir archivos estáticos en producción
     'django.contrib.sessions.middleware.SessionMiddleware',
     'corsheaders.middleware.CorsMiddleware',     # CORS debe ir antes de CommonMiddleware
     'django.middleware.common.CommonMiddleware',
@@ -35,14 +38,14 @@ MIDDLEWARE = [
 
 # Configuración de CORS: define orígenes permitidos y quita CORS_ORIGIN_ALLOW_ALL
 CORS_ALLOWED_ORIGINS = [
-    "https://sistemaany-dev1.vercel.app,http://localhost:4200"
+    'http://localhost:4200',
+    'https://www.pythonanywhere.com/'
+    'https://sistemaany-dev1.vercel.app'
 ]
 
 CORS_ALLOW_CREDENTIALS = True
 
 ROOT_URLCONF = 'dev_sistema_escolar_api.urls'
-
-
 
 import os
 
