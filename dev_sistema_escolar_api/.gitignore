@@ -4,6 +4,22 @@
 #     https://www.atlassian.com/git/tutorials/saving-changes/gitignore
 
 # Node artifact files
+
+Angular
+
+dev-sistema-escolar-webapp/node_modules/
+dev-sistema-escolar-webapp/dist/
+dev-sistema-escolar-webapp/.angular/
+
+Django / Python
+
+env/
+venv/
+*.pyc
+pycache/
+db.sqlite3
+.DS_Store
+
 node_modules/
 dist/
 
