@@ -1,0 +1,204 @@
+import { Component, Input, OnInit, SimpleChanges } from '@angular/core';
+import { Router, ActivatedRoute } from '@angular/router';
+import { Location } from '@angular/common';
+import { AlumnosService } from 'src/app/services/alumnos.service';
+import { FacadeService } from 'src/app/services/facade.service';
+
+@Component({
+  selector: 'app-registro-alumnos',
+  templateUrl: './registro-alumnos.component.html',
+  styleUrls: ['./registro-alumnos.component.scss']
+})
+export class RegistroAlumnosComponent implements OnInit {
+
+  @Input() rol: string = "";
+  @Input() datos_user: any = {};
+
+  //Para contraseñas
+  public hide_1: boolean = false;
+  public hide_2: boolean = false;
+  public inputType_1: string = 'password';
+  public inputType_2: string = 'password';
+
+  public alumno:any= {};
+  public token: string = "";
+  public errors:any={};
+  public editar:boolean = false;
+  public idUser: Number = 0;
+
+  constructor(
+    private router: Router,
+    private location : Location,
+    public activatedRoute: ActivatedRoute,
+    private AlumnosService: AlumnosService,
+    private facadeService: FacadeService
+  ) { }
+
+  ngOnInit(): void {
+    //El primer if valida si existe un parámetro en la URL
+    if(this.activatedRoute.snapshot.params['id'] != undefined){
+      this.editar = true;
+      //Asignamos a nuestra variable global el valor del ID que viene por la URL
+      this.idUser = this.activatedRoute.snapshot.params['id'];
+      console.log("ID User: ", this.idUser);
+      //Al iniciar la vista asignamos los datos del user
+      this.alumno = this.datos_user;
+    }else{
+      // Va a registrar un nuevo alumno
+      this.alumno = this.AlumnosService.esquemaAlumno();
+      this.alumno.rol = this.rol;
+      this.token = this.facadeService.getSessionToken();
+    }
+    //Imprimir datos en consola
+    console.log("Alumno: ", this.alumno);
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+      // Detectar cuando datos_user cambia
+      if (changes['datos_user'] && changes['datos_user'].currentValue) {
+        this.cargarDatosUser();
+      }
+    }
+    private cargarDatosUser(): void {
+      if (this.datos_user && Object.keys(this.datos_user).length > 0) {
+        this.alumno = {...this.datos_user}; // Copiar los datos
+      }
+    }
+
+  public regresar(){
+    this.location.back();
+  }
+
+  public registrar() {
+    //Validamos si el formulario está lleno y correcto
+    this.errors = {};
+    this.errors = this.AlumnosService.validarAlumno(this.alumno, this.editar);
+
+    if (Object.keys(this.errors).length > 0) {
+      alert("Por favor, corrige los errores en el formulario antes de continuar.");
+      return;
+    }
+    // Lógica para registrar un nuevo alumno
+    if(this.alumno.password == this.alumno.confirmar_password){
+      this.AlumnosService.registrarAlumno(this.alumno).subscribe(
+        (response) => {
+          // Redirigir o mostrar mensaje de éxito
+          alert("Alumno registrado exitosamente");
+          console.log("Alumno registrado: ", response);
+          if(this.token && this.token !== ""){
+            this.router.navigate(["alumnos"]);
+          }else{
+            this.router.navigate(["/"]);
+          }
+        },
+        (error) => {
+          // Manejar errores de la API
+          //alert("Error al registrar alumno");
+          //console.error("Error al registrar alumno: ", error);
+          console.error("Error al registrar alumno:", error);
+          if (error.error && error.error.message) {
+              alert(`Error: ${error.error.message}`);
+          } else {
+              alert("Error al registrar el alumno. Verifica los datos.");
+          }
+        }
+      );
+    }else{
+      alert("Las contraseñas no coinciden");
+      this.alumno.password="";
+      this.alumno.confirmar_password="";
+    }
+  }
+
+  public actualizar(){
+    // Validación de los datos
+    this.errors = {};
+    this.errors = this.AlumnosService.validarAlumno(this.alumno, this.editar);
+    if(Object.keys(this.errors).length > 0){
+      return false;
+    }
+
+    // Ejecutar el servicio de actualización
+    this.AlumnosService.actualizarAlumno(this.alumno).subscribe(
+      (response) => {
+        // Redirigir o mostrar mensaje de éxito
+        alert("Alumno actualizado exitosamente");
+        console.log("Alumno actualizado: ", response);
+        this.router.navigate(["alumnos"]);
+      },
+      (error) => {
+        // Manejar errores de la API
+        alert("Error al actualizar alumno");
+        console.error("Error al actualizar alumno: ", error);
+      }
+    );
+
+  }
+
+  //Funciones para password
+  showPassword()
+  {
+    if(this.inputType_1 == 'password'){
+      this.inputType_1 = 'text';
+      this.hide_1 = true;
+    }
+    else{
+      this.inputType_1 = 'password';
+      this.hide_1 = false;
+    }
+  }
+
+  showPwdConfirmar()
+  {
+    if(this.inputType_2 == 'password'){
+      this.inputType_2 = 'text';
+      this.hide_2 = true;
+    }
+    else{
+      this.inputType_2 = 'password';
+      this.hide_2 = false;
+    }
+  }
+
+  //Función para detectar el cambio de fecha
+  public changeFecha(event :any){
+    console.log(event);
+    console.log(event.value.toISOString());
+
+    this.alumno.fecha_nacimiento = event.value.toISOString().split("T")[0];
+    console.log("Fecha: ", this.alumno.fecha_nacimiento);
+  }
+
+  public soloLetras(event: KeyboardEvent) {
+    const charCode = event.key.charCodeAt(0);
+    // Permitir solo letras (mayúsculas y minúsculas) y espacio
+    if (
+      !(charCode >= 65 && charCode <= 90) &&  // Letras mayúsculas
+      !(charCode >= 97 && charCode <= 122) && // Letras minúsculas
+      charCode !== 32                         // Espacio
+    ) {
+      event.preventDefault();
+    }
+  }
+
+  public noCaracteresEsp(event: KeyboardEvent) {
+    if (event.ctrlKey || event.altKey ||
+        event.key === 'Backspace' ||
+        event.key === 'Delete' ||
+        event.key === 'Tab' ||
+        event.key === 'ArrowLeft' ||
+        event.key === 'ArrowRight' ||
+        event.key === 'Home' ||
+        event.key === 'End') {
+        return;
+    }
+
+    // Usar una expresión regular para validar solo letras y números
+    const regex = /^[a-zA-Z0-9]$/;
+
+    if (!regex.test(event.key)) {
+        event.preventDefault();
+    }
+  }
+
+}

@@ -1,0 +1,133 @@
+<div class="navbar-sidebar-wrapper">
+  <!-- Desktop sidebar -->
+  <nav class="scoop-side-navbar" *ngIf="!isMobileView">
+    <ul class="scoop-navbar-list">
+      <!--  dropdown de registros -->
+      <li *ngIf="canSeeRegisterItem()" class="scoop-navbar-item dropdown-parent" (click)="toggleMenu('registro')">
+        <span class="material-icons">person_add</span>
+        <span>Registro</span>
+        <span class="material-icons dropdown-icon">{{expandedMenu === 'registro' ? 'expand_less' : 'expand_more'}}</span>
+      </li>
+
+      <!-- opciones de registros -->
+      <ul class="dropdown-submenu" *ngIf="expandedMenu === 'registro'">
+        <li routerLink="/registro-usuarios/administrador" routerLinkActive="active" (click)="goAdministradores()" class="scoop-navbar-item submenu-item" *ngIf="isAdmin()">
+          <span class="material-icons">admin_panel_settings</span>
+          <span>Registro Administradores</span>
+        </li>
+        <li routerLink="/registro-usuarios/maestros" routerLinkActive="active" (click)="goMaestros()" class="scoop-navbar-item submenu-item" *ngIf="isAdmin() || isTeacher()">
+          <span class="material-icons">people</span>
+          <span>Registro Maestros</span>
+        </li>
+        <li routerLink="/registro-usuarios/alumnos" routerLinkActive="active" (click)="goAlumnos()" class="scoop-navbar-item submenu-item" *ngIf="isAdmin() || isTeacher() || isStudent()">
+          <span class="material-icons">school</span>
+          <span>Registro Alumnos</span>
+        </li>
+        <li routerLink="/registro-eventos-academicos" routerLinkActive="active" class="scoop-navbar-item submenu-item" *ngIf="isAdmin()">
+          <span class="material-icons">event</span>
+          <span>Registro Eventos Académicos</span>
+        </li>
+      </ul>
+
+      <!-- Screen de tablas y graficas -->
+      <li *ngIf="canSeeAdminItems()" routerLink="/administrador" routerLinkActive="active" class="scoop-navbar-item">
+        <span class="material-icons">admin_panel_settings</span>
+        <span>Admins</span>
+      </li>
+      <li *ngIf="canSeeTeacherItems()" routerLink="/maestros" routerLinkActive="active" class="scoop-navbar-item">
+        <span class="material-icons">people</span>
+        <span>Maestros</span>
+      </li>
+      <li *ngIf="canSeeStudentItems()" routerLink="/alumnos" routerLinkActive="active" class="scoop-navbar-item">
+        <span class="material-icons">school</span>
+        <span>Alumnos</span>
+      </li>
+      <li *ngIf="canSeeStudentItems()" routerLink="/graficas" routerLinkActive="active" class="scoop-navbar-item">
+        <span class="material-icons">bar_chart</span>
+        <span>Gráficas</span>
+      </li>
+      <li *ngIf="canSeeEventosItem()"  routerLink="/eventos" routerLinkActive="active" class="scoop-navbar-item">
+        <span class="material-icons">event</span>
+        <span>Eventos Académicos</span>
+      </li>
+    </ul>
+    <button class="scoop-logout-btn" (click)="logout()">
+      <span class="material-icons">logout</span>
+      <span>Cerrar sesión</span>
+    </button>
+  </nav>
+
+  <!-- Scoop-style top navbar -->
+  <nav class="scoop-navbar">
+    <button class="dashboard-toggle-btn" *ngIf="isMobileView" (click)="toggleSidebar()" aria-label="Abrir menú">
+      <span class="material-icons">menu_open</span>
+    </button>
+    <span class="scoop-navbar-logo">BUAP</span>
+    <div class="scoop-navbar-icons">
+      <span class="material-icons navbar-icon" (click)="togglePalette()" style="cursor:pointer">palette</span>
+      <div class="scoop-navbar-avatar" *ngIf="userInitial">{{ userInitial }}</div>
+    </div>
+  </nav>
+
+  <!-- Mobile sidebar overlay and menu -->
+  <ng-container *ngIf="isMobileView">
+    <div class="mobile-sidebar-overlay" [ngClass]="{'mobile-open': mobileOpen}" (click)="closeSidebar()"></div>
+    <nav class="scoop-side-navbar" [ngClass]="{'mobile-open': mobileOpen}">
+      <ul class="scoop-navbar-list">
+        <!-- dropdown para movil -->
+        <li *ngIf="canSeeRegisterItem()" class="scoop-navbar-item dropdown-parent" (click)="toggleMenu('registro')">
+          <span class="material-icons">person_add</span>
+          <span>Registro</span>
+          <span class="material-icons dropdown-icon">{{expandedMenu === 'registro' ? 'expand_less' : 'expand_more'}}</span>
+        </li>
+
+        <!-- Submenú del dropdown MOBILE -->
+        <ul class="dropdown-submenu" *ngIf="expandedMenu === 'registro'">
+          <li routerLink="/registro-usuarios/administrador" routerLinkActive="active" (click)="goAdministradores()" class="scoop-navbar-item submenu-item" (click)="closeSidebar()" *ngIf="isAdmin()">
+            <span class="material-icons">admin_panel_settings</span>
+            <span>Registro Administradores</span>
+          </li>
+          <li routerLink="/registro-usuarios/maestros" routerLinkActive="active" (click)="goMaestros()" class="scoop-navbar-item submenu-item" (click)="closeSidebar()" *ngIf="isAdmin() || isTeacher()">
+            <span class="material-icons">people</span>
+            <span>Registro Maestros</span>
+          </li>
+          <li routerLink="/registro-usuarios/alumnos" routerLinkActive="active" (click)="goAlumnos()" class="scoop-navbar-item submenu-item" (click)="closeSidebar()" *ngIf="isAdmin() || isTeacher() || isStudent()">
+            <span class="material-icons">school</span>
+            <span>Registro Alumnos</span>
+          </li>
+          <li routerLink="/registro-eventos-academicos" routerLinkActive="active" class="scoop-navbar-item submenu-item" (click)="closeSidebar()" *ngIf="isAdmin()">
+            <span class="material-icons">event</span>
+            <span>Registro Eventos Académicos</span>
+          </li>
+        </ul>
+
+        <!-- OTROS ITEMS DEL MENÚ MOBILE -->
+        <li *ngIf="canSeeAdminItems()" routerLink="/administrador" routerLinkActive="active" class="scoop-navbar-item" (click)="closeSidebar()">
+          <span class="material-icons">admin_panel_settings</span>
+          <span>Admins</span>
+        </li>
+        <li *ngIf="canSeeAdminItems()" routerLink="/maestros" routerLinkActive="active" class="scoop-navbar-item" (click)="closeSidebar()">
+          <span class="material-icons">people</span>
+          <span>Maestros</span>
+        </li>
+        <li *ngIf="canSeeStudentItems()" routerLink="/alumnos" routerLinkActive="active" class="scoop-navbar-item" (click)="closeSidebar()">
+          <span class="material-icons">school</span>
+          <span>Alumnos</span>
+        </li>
+        <li *ngIf="canSeeStudentItems()" routerLink="/graficas" routerLinkActive="active" class="scoop-navbar-item" (click)="closeSidebar()">
+          <span class="material-icons">bar_chart</span>
+          <span>Gráficas</span>
+        </li>
+        <li *ngIf="canSeeEventosItem()" routerLink="/eventos" routerLinkActive="active" class="scoop-navbar-item" (click)="closeSidebar()">
+          <span class="material-icons">event</span>
+          <span>Eventos Académicos</span>
+        </li>
+      </ul>
+      <button class="scoop-logout-btn" (click)="logout(); closeSidebar()">
+        <span class="material-icons">logout</span>
+        <span>Cerrar sesión</span>
+      </button>
+    </nav>
+  </ng-container>
+<!-- end navbar-sidebar-wrapper -->
+</div>

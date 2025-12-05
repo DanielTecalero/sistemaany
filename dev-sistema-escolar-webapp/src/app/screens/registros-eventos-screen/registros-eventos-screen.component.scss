@@ -1,0 +1,433 @@
+/* =========================
+   Wrapper y estructura principal
+   ========================= */
+
+.wrapper {
+  margin: 0;
+  min-height: 100vh;
+  width: 100%;
+  background-image: url('/assets/images/fondo-azul.jpg');
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
+body {
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+.reg-shell {
+  display: grid;
+  gap: 20px;
+  padding: clamp(16px, 3vw, 28px);
+}
+
+/* =========================
+   Tarjeta de encabezado
+   ========================= */
+
+.role-card {
+  width: min(100%, 980px);
+  margin-inline: auto;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+
+  .role-card-header {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.5rem;
+    gap: 1rem;
+  }
+
+  .actions-header-colum {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 0.5rem;
+    flex: 1;
+  }
+
+  .title-card {
+    font-family: Nexa-Bold, Arial, sans-serif;
+    font-size: clamp(1.5rem, 1.2rem + 1vw, 2rem);
+    margin: 0;
+    color: #231F20;
+  }
+
+  .subtitle-card {
+    font-family: Nexa-Light, Arial, sans-serif;
+    font-size: clamp(0.95rem, 0.8rem + 0.5vw, 1.15rem);
+    color: #666;
+    margin: 0;
+  }
+}
+
+/* Botón regresar */
+.actions-row {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.back-btn {
+  border-radius: 20%;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+}
+
+.back-icon {
+  font-size: 1.9rem !important;
+  width: auto !important;
+  height: auto !important;
+  color: #0092B8;
+}
+
+/* =========================
+   Área de formularios
+   ========================= */
+
+.forms-area {
+  width: min(100%, 980px);
+  margin-inline: auto;
+  background: white;
+  border-radius: 12px;
+  padding: clamp(20px, 4vw, 40px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.body-registro {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+/* =========================
+   Campos de formulario
+   ========================= */
+
+mat-form-field {
+  width: 100% !important;
+  margin: 0;
+}
+
+.mat-textarea {
+  height: auto !important;
+}
+
+/* =========================
+   Títulos y labels
+   ========================= */
+
+.title-user {
+  font-size: clamp(1.5rem, 1.2rem + 1vw, 2rem);
+  font-family: Nexa-Bold;
+  letter-spacing: 1px;
+  color: #231F20;
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+.title-materias {
+  font-size: 16px;
+  text-align: left;
+  font-family: Nexa;
+  letter-spacing: 2px;
+  color: #231F20;
+  opacity: 1;
+}
+
+/* =========================
+   Checkboxes de público objetivo
+   ========================= */
+
+.select-publico {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  padding: 1rem;
+  background: #ffffff;
+  border-radius: 8px;
+}
+
+.row-header {
+  width: 100%;
+  margin-bottom: 0.5rem;
+}
+
+.checkbox-group {
+  display: flex;
+  align-items: center;
+}
+
+.checkbox-item {
+  width: 100%;
+}
+
+.d-checkbox-nombre {
+  font-size: clamp(0.95rem, 0.9rem + 0.2vw, 1.1rem);
+  color: #231F20;
+  font-weight: 500;
+  font-family: Nexa;
+}
+
+/* Estilos de checkboxes */
+::ng-deep .mat-mdc-checkbox.mat-mdc-checkbox-checked .mdc-checkbox__background,
+::ng-deep .mat-mdc-checkbox.mat-mdc-checkbox-checked .mdc-checkbox__ripple {
+  background-color: #0092B8 !important;
+  border-color: #0092B8 !important;
+}
+
+::ng-deep .mat-mdc-checkbox:hover .mdc-checkbox__background {
+  background-color: rgba(0, 146, 184, 0.1);
+}
+
+/* =========================
+   Botones
+   ========================= */
+
+.section-buttons {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 1.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid #e0e0e0;
+}
+
+.btn-primary,
+.btn-danger {
+  flex: 1;
+  max-width: 208px;
+  height: 48px;
+  border-radius: 8px !important;
+  font-family: Nexa-Bold;
+  font-size: 16px;
+  font-weight: bold;
+  text-align: center;
+  color: #FFFFFF;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn-primary {
+  background-color: #0092B8 !important;
+  border-color: #0092B8 !important;
+}
+
+.btn-primary:hover {
+  background-color: #017895 !important;
+  border-color: #017895 !important;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 146, 184, 0.3);
+}
+
+.btn-danger {
+  background-color: #E84150 !important;
+  border-color: #E84150 !important;
+}
+
+.btn-danger:hover {
+  background-color: #ce1626 !important;
+  border-color: #ce1626 !important;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(232, 65, 80, 0.3);
+}
+
+/* =========================
+   Mensajes de error
+   ========================= */
+
+.invalid-feedback {
+  color: #E84150;
+  font-size: clamp(0.8rem, 0.75rem + 0.2vw, 0.95rem);
+  font-family: Nexa;
+  margin-top: -1rem;
+  padding-left: 0.5rem;
+}
+
+/* =========================
+   Responsive: Tablet (700px - 992px)
+   ========================= */
+
+@media (min-width: 700px) and (max-width: 992px) {
+  .reg-shell {
+    padding: clamp(20px, 3vw, 32px);
+  }
+
+  .role-card-header {
+    padding: 1.25rem !important;
+  }
+
+  .forms-area {
+    padding: clamp(24px, 3.5vw, 36px);
+  }
+
+  .body-registro {
+    gap: 1.25rem;
+  }
+
+  .select-publico {
+    padding: 0.85rem;
+  }
+
+  .section-buttons {
+    gap: 1.25rem;
+  }
+
+  .btn-primary,
+  .btn-danger {
+    max-width: 180px;
+    font-size: 15px;
+  }
+}
+
+/* =========================
+   Responsive: Mobile (≤ 699px)
+   ========================= */
+
+@media (max-width: 699px) {
+  .reg-shell {
+    padding: clamp(12px, 2.5vw, 20px);
+    gap: 16px;
+  }
+
+  .role-card {
+    border-radius: 8px;
+  }
+
+  .role-card-header {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    padding: 1rem !important;
+    gap: 0.75rem;
+  }
+
+  .actions-header-colum {
+    width: 100%;
+  }
+
+  .title-card {
+    font-size: clamp(1.25rem, 1.1rem + 0.8vw, 1.75rem);
+    text-align: center;
+    width: 100%;
+  }
+
+  .subtitle-card {
+    font-size: clamp(0.85rem, 0.75rem + 0.4vw, 1rem);
+    text-align: center;
+    width: 100%;
+  }
+
+  .actions-row {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .back-btn {
+    width: 44px;
+    height: 44px;
+  }
+
+  .back-icon {
+    font-size: 1.5rem !important;
+  }
+
+  .forms-area {
+    padding: clamp(16px, 3vw, 24px);
+    border-radius: 8px;
+  }
+
+  .body-registro {
+    gap: 1.25rem;
+  }
+
+  .title-user {
+    text-align: center;
+    margin-bottom: 0.75rem;
+  }
+
+  .title-materias {
+    font-size: clamp(0.95rem, 0.85rem + 0.25vw, 1.1rem);
+    text-align: center;
+  }
+
+  .select-publico {
+    padding: 0.75rem;
+    gap: 0.5rem;
+  }
+
+  .row-header {
+    text-align: center;
+  }
+
+  .d-checkbox-nombre {
+    font-size: clamp(0.9rem, 0.85rem + 0.15vw, 1rem);
+  }
+
+  .section-buttons {
+    flex-direction: column;
+    gap: 0.75rem;
+    margin-top: 1rem;
+    padding-top: 1rem;
+  }
+
+  .btn-primary,
+  .btn-danger {
+    max-width: 100%;
+    width: 100%;
+    font-size: 15px;
+    height: 46px;
+  }
+
+  .invalid-feedback {
+    font-size: clamp(0.75rem, 0.7rem + 0.15vw, 0.85rem);
+    margin-top: -0.75rem;
+    padding-left: 0.25rem;
+  }
+}
+
+/* =========================
+   Responsive: Mobile pequeño (≤ 400px)
+   ========================= */
+
+@media (max-width: 400px) {
+  .reg-shell {
+    padding: 10px;
+  }
+
+  .role-card-header {
+    padding: 0.85rem !important;
+  }
+
+  .forms-area {
+    padding: 14px;
+  }
+
+  .body-registro {
+    gap: 1rem;
+  }
+
+  .select-publico {
+    padding: 0.65rem;
+  }
+
+  .btn-primary,
+  .btn-danger {
+    height: 44px;
+    font-size: 14px;
+  }
+}

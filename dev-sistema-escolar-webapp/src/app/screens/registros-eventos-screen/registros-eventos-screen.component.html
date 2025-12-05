@@ -1,0 +1,34 @@
+<div class="wrapper">
+  <div class="reg-shell">
+    <!-- Card de encabezado -->
+    <mat-card class="role-card">
+      <mat-card-header class="role-card-header">
+        <div class="actions-header-colum">
+          <ng-container *ngIf="!editar; else active">
+            <mat-card-title class="title-card">Registro de evento académico</mat-card-title>
+            <mat-card-subtitle class="subtitle-card">
+              Completa el formulario para registrar un nuevo evento
+            </mat-card-subtitle>
+          </ng-container>
+          <ng-template #active>
+            <mat-card-title class="title-card">Edición de evento académico</mat-card-title>
+            <mat-card-subtitle class="subtitle-card">
+              Modifica los datos del evento seleccionado
+            </mat-card-subtitle>
+          </ng-template>
+        </div>
+        <!-- Botón regresar -->
+        <div class="actions-row">
+          <button mat-icon-button class="back-btn" (click)="goBack()">
+            <mat-icon class="back-icon">arrow_back</mat-icon>
+          </button>
+        </div>
+      </mat-card-header>
+    </mat-card>
+
+    <div class="forms-area">
+      <app-registro-eventos-academicos-screen [datos_evento]="editar ? evento : null" ></app-registro-eventos-academicos-screen>
+    </div>
+
+  </div>
+</div>
