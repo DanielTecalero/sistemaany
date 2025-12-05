@@ -132,4 +132,12 @@ REST_FRAMEWORK = {
     'DEFAULT_FILTER_BACKENDS': (
         'django_filters.rest_framework.DjangoFilterBackend',
     ),
+    # ----------------------------------------------------------------
+    # AÑADE ESTA SECCIÓN PARA CORREGIR EL ERROR 500 DEL ADMIN
+    # Esto asegura que el Admin se renderice usando la vista estándar.
+    # ----------------------------------------------------------------
+    'DEFAULT_RENDERER_CLASSES': (
+        'rest_framework.renderers.JSONRenderer',
+        'rest_framework.renderers.BrowsableAPIRenderer',
+    ),
 }

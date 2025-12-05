@@ -13,8 +13,9 @@ from dev_sistema_escolar_api.views import auth
 
 
 urlpatterns = [
+        path('admin/', admin.site.urls), # ESTO DEBE SER admin.site.urls
    #Create Admin
-        path('admin/', users.AdminView.as_view()),
+        path('create-admin/', users.AdminView.as_view()),
     #Admin Data
         path('lista-admins/', users.AdminAll.as_view()),
     #Edit Admin
